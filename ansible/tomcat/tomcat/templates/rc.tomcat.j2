@@ -1,0 +1,33 @@
+#!/bin/bash
+# create date: Tue May 20
+# modify date: Tue May 21
+# file name: tomcat
+# author: luhuiyong
+# porpuse: Be Used to manage tomcat service
+# chkconfig: 345 35 75
+# Description: Be Used to manage tomcat service
+###请根据实际情况修改###
+TOMCAT_BASE="/data/tomcat-server/{{tomcat_app_name}}"
+TOMCAT_USER="{{tomcat_user}}"
+####################################################
+if [ `id -u` -ne 0 ]
+then
+echo "权限不足,请使用sudo $0"
+exit 1
+fi
+case "$1" in
+start)
+su -m $TOMCAT_USER -c "$TOMCAT_BASE/bin/catalina.sh start"
+;;
+stop)
+su -m $TOMCAT_USER -c "$TOMCAT_BASE/bin/catalina.sh stop -force"
+;;
+restart)
+echo "Restarting tomcat $TOMCAT_BASE"
+$0 stop
+$0 start
+;;
+*)
+echo "可用指令: start | stop | restart"
+;;
+esac

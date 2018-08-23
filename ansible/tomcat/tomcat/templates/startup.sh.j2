@@ -1,0 +1,6 @@
+app={{ tomcat_app[item].name }}
+ulimit -n 65536
+export JAVA_OPTS="-server -Xms{{ tomcat_app[item].tomcat_max_memory }} -Xmx{{ tomcat_app[item].tomcat_max_memory }} -Xmn{{ tomcat_app[item].tomcat_min_memory }} -XX:PermSize=512m -XX:MaxPermSize=512m -XX:+UseParallelOldGC -XX:ParallelGCThreads=3 -XX:+ScavengeBeforeFullGC -XX:+UseAdaptiveSizePolicy -XX:InitialTenuringThreshold=1 -XX:+UseFastAccessorMethods -XX:+UseBiasedLocking -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=10001 -Djava.awt.headless=true -verbose:gc -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintAdaptiveSizePolicy -XX:+PrintHeapAtGC -XX:+PrintTenuringDistribution -Xloggc:/data/logs/$app/jvm/gc/gc.log -XX:ErrorFile=/data/logs/$app/jvm/crash/hs_err_pid.log -XX:HeapDumpPath=/data/logs/$app/jvm/crash/java.hprof -Dconfig.home=/data/tomcat/$app/config  -Dlogback.configurationFile=/data/tomcat/$app/config/logback.xml -Dfile.encoding=UTF-8"
+TOMCAT_HOME=/data/tomcat
+export JAVA_HOME=/usr/lib/jdk1.6.0
+$TOMCAT_HOME/bin/startup.sh -config /data/tomcat/$app/server.xml

@@ -1,0 +1,9 @@
+JAVA_HOME="/usr/java/default"
+JAVA_OPTS="$JAVA_OPTS -server -Xms{{tomcat_min_memory}} -Xmx{{tomcat_max_memory}} -Xss250k -XX:MaxPermSize=256M -XX:+CMSClassUnloadingEnabled -XX:-UseLargePages -XX:+UseParallelGC -XX:+UseParallelOldGC"
+CATALINA_OPTS="$CATALINA_OPTS -Djava.library.path=/usr/local/apr/lib"
+CATALINA_PID="$CATALINA_HOME/temp/tomcat.pid"
+TOMCAT_USER={{tomcat_user}}
+if [[ `whoami` != $TOMCAT_USER && `whoami` != nobody ]];then
+        echo -e "\033[31mYou should run tomcat as \"$TOMCAT_USER\"\033[0m"
+        exit 1
+fi

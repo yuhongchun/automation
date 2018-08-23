@@ -1,0 +1,34 @@
+---
+galaxy_info:
+  author: Sergey Fayngold
+  license: BSD
+  min_ansible_version: 1.4
+  platforms:
+  - name: Ubuntu
+    versions:
+  #  - all
+  #  - lucid
+  #  - maverick
+  #  - natty
+  #  - oneiric
+    - precise
+  #  - quantal
+  #  - raring
+  #  - saucy
+  #  - trusty
+  - name: Debian
+    versions:
+  #  - all
+  #  - etch
+  #  - lenny
+  #  - squeeze
+    - wheezy
+  categories:
+  #- development
+  #- monitoring
+  #- networking
+  #- packaging
+  #- system
+  - web
+dependencies: []
+  

@@ -1,0 +1,12 @@
+base_path=/data/tomcat
+project_name={{ tomcat_app[item].name }}
+log_path=/data/log/tomcat/$project_name
+rsync_log_path=$log_path/rsync.`date '+%Y%m%d'`.log
+if [ ! -d "$log_path" ];then
+	mkdir -p $log_path
+fi
+pid=`ps aux | grep $base_path/$project_name/server.xml |grep -v "grep $base_path/$project_name/server.xml"|awk '{print $2}'`
+if [ -n "$pid" ];then
+echo "`date '+%Y-%m-%d %H:%M:%S'` : ${project_name} process $pid, killing..." >> $rsync_log_path
+kill -9 $pid
+fi

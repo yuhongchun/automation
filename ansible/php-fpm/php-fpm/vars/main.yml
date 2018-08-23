@@ -1,0 +1,54 @@
+---
+
+env:
+ RUNLEVEL: 1
+
+yum_packages:
+  - php54
+  - php54-bcmath
+  - php54-common
+  - php54-fpm
+  - php54-gd
+  - php54-mysql
+  - php54-mcrypt
+  - php54-mbstring
+  - php54-pear
+  - php54-devel
+  - php54-pecl-memcache
+  - php54-xcache
+  - php54-redis
+  - php54-xml
+
+yum_packages_55u:
+  - php55u
+  - php55u-bcmath
+  - php55u-common
+  - php55u-fpm
+  - php55u-gd
+  - php55u-mysql
+  - php55u-mcrypt
+  - php55u-mbstring
+  - php55u-pear
+  - php55u-devel
+  - php55u-pecl-memcache
+  - php55u-xml
+
+yum_packages_53:
+  - php
+  - php-bcmath
+  - php-common
+  - php-fpm
+  - php-gd
+  - php-mysql
+  - php-mcrypt
+  - php-mbstring
+  - php-pear
+  - php-devel
+  - php-pecl-memcache
+  - php-xcache
+  - php-redis
+  - php-xml
+php-config-path:
+  - cgi
+  - cli
+  - fpm

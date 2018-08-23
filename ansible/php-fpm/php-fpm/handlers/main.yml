@@ -1,0 +1,6 @@
+---
+- name: restart php-fpm
+  shell: /etc/init.d/php5-fpm restart
+
+- name: reload php-fpm
+  shell: /etc/init.d/php5-fpm reloaded

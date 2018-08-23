@@ -1,0 +1,56 @@
+---
+
+- name: check if tomcat installed
+  stat: path=/data/tomcat
+  register: is_tomcat_installed
+
+#- name: mkdir /data/tomcat
+#  file: path=/data/tomcat state=directory
+
+- name: install tomcat 1
+  unarchive: src=apache-tomcat-7.0.55.tar.gz dest=/var/tmp
+  when: is_tomcat_installed.stat.isdir is undefined and is_tomcat_installed.stat.isdir == false
+
+- name: install tomcat 2
+  command: cp -r /var/tmp/apache-tomcat-7.0.55 /data/tomcat
+  when: is_tomcat_installed.stat.isdir is undefined and is_tomcat_installed.stat.isdir == false
+
+- name: delete default webapps dir
+  file: path=/data/tomcat/webapps/ state=absent
+  when: is_tomcat_installed.stat.isdir is undefined and is_tomcat_installed.stat.isdir == false
+
+- name: change tomcat boot script
+  template: src=catalina.sh.j2 dest=/data/tomcat/bin/catalina.sh owner=root group=root mode=0755
+
+- name: create log directory
+  file: path=/data/log/tomcat/{{ item }} state=directory owner=root group=root mode=0755 recurse=yes
+  with_items: tomcat_app_name
+
+- name: change tomcat log configure
+  template: src=logging.properties.j2 dest=/data/tomcat/conf/logging.properties owner=root group=root mode=0644
+
+- name: config permission 1
+  file: path=/data/tomcat/{{ item }} state=directory owner=root group=root mode=0755 recurse=yes
+  with_items: tomcat_app_name
+
+- name: config server.xml.j2
+  template: src=server.xml.j2 dest=/data/tomcat/{{ item }}/server.xml owner=root group=root mode=0755
+  with_items: tomcat_app.keys()
+  ignore_errors: yes
+
+- name: config startup.sh
+  template: src=startup.sh.j2 dest=/data/tomcat/{{ item }}/startup.sh owner=root group=root mode=0755
+  with_items: tomcat_app.keys()
+  ignore_errors: yes
+
+- name: config shutdown.sh
+  template: src=shutdown.sh.j2 dest=/data/tomcat/{{ item }}/shutdown.sh owner=root group=root mode=0755
+  with_items: tomcat_app.keys()
+  ignore_errors: yes
+
+- name: config apps directory
+  file: path=/data/app state=directory
+
+- name: config permission 1
+  file: path=/data/app/{{ item }} state=directory owner=root group=root mode=0755 recurse=yes
+  with_items: tomcat_app_name

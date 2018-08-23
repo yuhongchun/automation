@@ -1,0 +1,7 @@
+;{{ ansible_managed }}
+
+[{{ item.pool.name }}]
+{% for v in item.pool.vars %}
+   {{ v }};
+{% endfor %} 
+

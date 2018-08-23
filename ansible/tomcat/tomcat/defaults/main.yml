@@ -1,0 +1,26 @@
+---
+tomcat_app_name:
+  - bc-svr-web
+
+tomcat_app:
+   bc-page-web:
+     name: bc-page-web
+     tomcat_app_root: "/data/app/bc-page-web"
+     tomcat_user: tomcat
+     tomcat_http_port: 8080
+     tomcat_ajp_port: 8009
+     tomcat_shutdown_port: 8005
+     tomcat_url_root: "/"
+     tomcat_max_memory: "2048M"
+     tomcat_min_memory: "512M"
+   bc-svr-web:
+     name: bc-svr-web
+     tomcat_app_root: "/data/app/bc-page-web"
+     tomcat_user: tomcat
+     tomcat_http_port: 8081
+     tomcat_ajp_port: 8010
+     tomcat_shutdown_port: 8006
+     tomcat_url_root: "/"
+     tomcat_max_memory: "2048M"
+     tomcat_max_memory: "2048M"
+     tomcat_min_memory: "512M"

@@ -1,0 +1,35 @@
+---
+php_version: 'php54'
+#如果要php55 变量改成php55
+#如果要php53 变量改成php53
+
+php_modules:
+ - php5
+ - php5-common
+ - php5-cli
+ - php5-cgi
+ - php5-fpm
+ - php5-mcrypt
+ - php5-mysql
+ - php5-curl
+ - php5-gd
+ - php5-memcache
+ #- php5-memcached
+ - php5-xcache
+ - php5-redis
+
+
+fpm_pools:
+ - pool:
+    name: www
+    vars:
+     - listen = 127.0.0.1:9000
+     - listen.allowed_clients = 127.0.0.1
+     - user = www-data
+     - group = www-data
+     - pm = dynamic
+     - pm.max_children = 50
+     - pm.start_servers = 5
+     - pm.min_spare_servers = 5
+     - pm.max_spare_servers = 35
+     - slowlog = /var/log/php-fpm/www-slow.log

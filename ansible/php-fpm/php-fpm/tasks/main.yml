@@ -1,0 +1,76 @@
+---
+- name: u'安装php54包'
+  apt: name={{ item }} state=present force=yes
+  with_items: php_modules
+#  with_items: yum_packages
+  environment: env
+  tags: [packages,php,fpm]
+
+- name: install php5-cgi
+  apt: name=php5-cgi state=present
+
+- name: install php5-memcached
+  apt: name=php5-memcached state=present
+
+- name: u'添加session目录'
+  file: path="{{item}}" owner=root group=root mode=0777 state=directory
+  with_items:
+    - /var/lib/php/session
+    - /var/log/php-fpm
+    - /data/log/php-fpm
+  tags: php-config
+
+- name: u'php log logrotate'
+  copy: src="logrotate_php_fpm" dest='/etc/logrotate.d/php-fpm' owner=root group=root mode=0644
+  tags: php-config
+
+- name: u'php错误日志'
+  file: path='/data/log/php/' owner=root group=root mode=0777 state=directory
+  tags: php-config
+
+- name: u'php-fpm错误日志'
+  file: path='/data/log/php-fpm/' owner=root group=root mode=0777 state=directory
+  tags: php-config
+
+- name: u'配置/etc/php.ini'
+  copy: src=php.ini  dest=/etc/php5/{{item}}/php.ini backup=yes force=yes owner=root group=root mode=0644
+  with_items:
+    - cgi
+    - cli
+    - fpm
+  notify:
+   - restart php-fpm
+  tags: [configuration,php,fpm,php-config]
+
+- name: u'配置/etc/php-fpm.conf'
+  copy: src="php-fpm.conf" dest="/etc/php5/fpm/php-fpm.conf" owner=root group=root mode=0644
+  tags: [configuration,php,fpm,php-config]
+
+- name: u'copy chroot 脚本'
+  copy: src="chroot.sh" dest="/data/app/" owner=root group=root mode=0644
+
+- name: u'执行chroot脚本'
+  command: /bin/bash chroot.sh chdir="/data/app/"
+
+- name: u'删除默认php-fpm.d/www.conf配置'
+  file: path=/etc/php5/fpm/pool.d/www.conf state=absent
+  notify: 
+   - restart php-fpm
+  tags: [configuration,php,fpm,php-config]
+
+- name: u'Pool配置'
+  template: src=pool.conf.j2 dest=/etc/php5/fpm/pool.d/{{ item['pool']['name'] }}.conf backup=yes
+  with_items: fpm_pools
+  when: fpm_pools|lower != 'none'
+  notify: 
+   - restart php-fpm
+  tags: [configuration,php,fpm,php-config]
+
+- name: Check php-fpm syntax of configuration files
+  shell: /usr/sbin/php5-fpm -t
+  register: result
+  changed_when: "result.rc != 0"
+  tags: [configuration,php,fpm,php-config]
+
+- name: Start the php-fpm service
+  shell: /etc/init.d/php5-fpm start
