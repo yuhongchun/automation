@@ -1,0 +1,5 @@
+---
+- hosts: all
+  gather_facts: True
+  roles:
+    - { role: tomcat , tags: “tomcat"}
