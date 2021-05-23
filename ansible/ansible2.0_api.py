@@ -299,43 +299,10 @@ def compose_dynamic_hosts(host_list):
 
 
 if __name__ == '__main__':
-    # reload(sys)
-    # sys.setdefaultencoding('utf8')
-    # [
-    #             {"hostname": "192.168.100.4", "port": "22", "username": "root", "password": "pw"},
-    #             {"hostname": "192.168.100.5", "port": "22", "username": "root", "password": "pw"},
-    #                 {"hostname": "192.168.1.1", "port": "22", "username": "root", "password": "pw"}
-    #             ]
-    # resource =  {
-    #                 "dynamic_host": {  #定义的动态主机名，需要跟playbook里面的hosts对应
-    #                     "hosts": [
-    #                                 {"hostname": "192.168.1.34", "port": "22", "username": "root", "password": "pw"},
-    #                                 {"hostname": "192.168.1.130", "port": "22", "username": "root", "password": "pw"},
-    #                                 {"hostname": "192.168.1.1", "port": "22", "username": "root", "password": "pw"}
-    #                               ],
-    #                     "vars": {
-    #                              "var1":"ansible",
-    #                              "var2":"saltstack"
-    #                              }
-    #                 }
-    #             }
-
-
- #   ip = "10.0.8.106"
     with open('host','r') as  fp:
         for i in fp.readlines():
             ip =i.strip()
-            #    resource = [{"hostname": "120.26.42.225"},{"hostname": "120.26.42.226"},{"hostname": "120.26.42.227"},{"hostname": "192.168.1.1"}]
             resource = [{"hostname": ip, "username": "root", "ssh_key": "/root/.ssh/id_rsa"}]
-            #    resource = {
-            #                     "dynamic_host": {  #定义的动态主机名，需要跟playbook里面的hosts对应
-            #                         "hosts": [
-            #                                     {"hostname": "10.0.8.106"},
-            #               {"hostname": "192.168.3.253"},
-            #               {"hostname": "192.168.1.194"},
-            #                                   ],
-            #		}
-            #	}
 
             rbt = ANSRunner(resource)  # resource可以是列表或者字典形式，如果做了ssh-key认证，就不会通过账户密码方式认证
             rbt.run_model(host_list=[ip], module_name='setup', module_args='filter=ansible_all_ipv4_addresses')
